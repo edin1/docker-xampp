@@ -17,4 +17,4 @@ docker run -p 41061:22 -p 41062:80 -v /path/on/the/host/to/myproject:/opt/lampp/
 docker stop $(docker ps -q --filter ancestor=mysername/debian:xampp)
 ```
 
-The servers are run as the daemon user, so the Dockerfile changes the GID and UID of that user to 1000, which should be your host user ID. Of course, you can change it to any acceptable ID to match your setup.
+The servers are run as the daemon user, so the Dockerfile changes the GID and UID of that user to 1000, which should be your host user ID. Of course, you can change it to any acceptable ID to match your setup. The correct GID/UID allows the httpd process to write to your project directory.
