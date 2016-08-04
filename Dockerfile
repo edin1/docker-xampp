@@ -7,7 +7,8 @@ RUN apt-get update --fix-missing
 # curl is needed to download the xampp installer, net-tools provides netstat command for xampp
 RUN apt-get -y install curl net-tools
 
-RUN curl -o xampp-linux-installer.run "https://downloadsapachefriends.global.ssl.fastly.net/xampp-files/5.6.21/xampp-linux-x64-5.6.21-0-installer.run?from_af=true"
+# RUN curl -o xampp-linux-installer.run "https://downloadsapachefriends.global.ssl.fastly.net/xampp-files/5.6.23/xampp-linux-x64-5.6.23-0-installer.run?from_af=true"
+ADD ./xampp-linux-installer.run .
 RUN chmod +x xampp-linux-installer.run
 RUN bash -c './xampp-linux-installer.run'
 RUN ln -sf /opt/lampp/lampp /usr/bin/lampp
@@ -17,8 +18,8 @@ RUN sed -i.bak s'/Require local/Require all granted/g' /opt/lampp/etc/extra/http
 
 # Create a /www folder and a symbolic link to it in /opt/lampp/htdocs. It'll be accessible via http://localhost:[port]/www/
 # This is convenient because it doesn't interfere with xampp, phpmyadmin or other tools in /opt/lampp/htdocs
-RUN mkdir /www
-RUN ln -s /www /opt/lampp/htdocs/
+# RUN mkdir /www
+# RUN ln -s /www /opt/lampp/htdocs/
 
 # SSH server
 RUN apt-get install -y -q supervisor openssh-server
@@ -52,5 +53,13 @@ EXPOSE 80
 # write a startup script
 RUN echo '/opt/lampp/lampp start' >> /startup.sh
 RUN echo '/usr/bin/supervisord -n' >> /startup.sh
+
+RUN usermod -u 1000 daemon
+RUN groupmod -g 1000 daemon
+# RUN groupadd -g 1000 user1000
+# RUN usermod -a -G user1000 daemon
+# RUN usermod -a -G root daemon
+# RUN usermod -a -G user1000 root
+# RUN usermod -a -G user1000 www-data
 
 CMD ["sh", "/startup.sh"]
