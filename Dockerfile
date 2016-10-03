@@ -54,6 +54,8 @@ EXPOSE 80
 RUN echo '/opt/lampp/lampp start' >> /startup.sh
 RUN echo '/usr/bin/supervisord -n' >> /startup.sh
 
+# Needed to make shared virtual folders that are owned by the default local user
+# writable by the lamp web server process
 RUN usermod -u 1000 daemon
 RUN groupmod -g 1000 daemon
 # RUN groupadd -g 1000 user1000
@@ -61,5 +63,15 @@ RUN groupmod -g 1000 daemon
 # RUN usermod -a -G root daemon
 # RUN usermod -a -G user1000 root
 # RUN usermod -a -G user1000 www-data
+
+RUN echo "export PATH=/opt/lampp/bin:$PATH" >> /root/.bash_profile
+
+RUN /opt/lampp/bin/pear install PHP_CodeSniffer
+
+RUN apt-get install -y git
+
+RUN git clone git://github.com/yiisoft/yii2-coding-standards.git /root/yii2-coding-standards
+
+RUN cp -r /root/yii2-coding-standards/Yii2/. /opt/lampp/lib/php/PHP/CodeSniffer/Standards/Yii2
 
 CMD ["sh", "/startup.sh"]
