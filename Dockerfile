@@ -57,7 +57,7 @@ RUN echo '/usr/bin/supervisord -n' >> /startup.sh
 # Needed to make shared virtual folders that are owned by the default local user
 # writable by the lamp web server process
 RUN usermod -u 1000 daemon
-RUN groupmod -g 1000 daemon
+RUN groupmod -o -g 1000 daemon
 # RUN groupadd -g 1000 user1000
 # RUN usermod -a -G user1000 daemon
 # RUN usermod -a -G root daemon
