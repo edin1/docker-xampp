@@ -72,6 +72,8 @@ RUN apt-get install -y git
 
 RUN git clone git://github.com/yiisoft/yii2-coding-standards.git /root/yii2-coding-standards
 
+RUN mkdir -p /opt/lampp/lib/php/PHP/CodeSniffer/Standards/Yii2
+
 RUN cp -r /root/yii2-coding-standards/Yii2/. /opt/lampp/lib/php/PHP/CodeSniffer/Standards/Yii2
 
 CMD ["sh", "/startup.sh"]
